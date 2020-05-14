@@ -1,21 +1,21 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven 3.6.3'
+        jdk 'jdk8'
+    }
+
     stages {
         stage('Build') {
             steps {
                 echo 'Building...'
-                mvn install
+                sh 'mvn install'
             }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing...'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
+            post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml'
+                }
             }
         }
     }
